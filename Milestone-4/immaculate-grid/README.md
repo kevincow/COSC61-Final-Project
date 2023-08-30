@@ -1,7 +1,7 @@
 # The Immaculate Grid 
 My database enhancement is a trivia webgame inspired by the increasingly popular game also known as the [Immaculate Grid](https://www.immaculategrid.com) except that the prompts are more based off of what suited my database. The backend of this game generates templates of the queries that the user is challenged to complete (via entering a player name through the front-end) in which the query returns at least one valid solution, testing the user's knowledge of baseball trivia. 
 
-## Game Rules and Mechanics
+## About the Game: Game Rules and Mechanics
 The game works as follows:
 * There is a 3 x 3 grid with 6 different prompts
 * It is the user's goal to satisfy as many cells as possible within the 9 answering attempts. Each answer entry counts as an attempt, so the user cannot answer any of the cells incorrectly in order to achieve an Immaculate Grid.
