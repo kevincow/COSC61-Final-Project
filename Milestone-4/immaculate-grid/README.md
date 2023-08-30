@@ -35,6 +35,7 @@ The link to a video with around 20 minutes of my gameplay is way too large to be
 * `JSON_alternative.php` - Provides a text-based backup for communication between `script.js` and `check_answer.php`. 
 * `prompts.sql` - Not necessary to run the game at this point, but was used to craft all of the prompts and their respective attributes.
 * `images` - A subdirectory that stores all of the images, which mainly constitute logos, needed for the game.
+* `baseball-db.sql` - This file was just 1 MB too large to be stored into git, but the link to the file is [here](https://drive.google.com/file/d/1nM4F9aOCGZuL3rKZIJ_iQzYb5bDk8XQz/view?usp=sharing). This sql file can be used to reconstruct the baseball database in one go and was very helpful when importing the database to RDS.
 
 
 
