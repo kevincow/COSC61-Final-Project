@@ -19,6 +19,12 @@ The game works as follows:
 4. In terminal, enter the command `php -S localhost:8000`
 5. In a web browser, go to `localhost:8000`
 
+## Sample Gameplay
+The link to a video with around 20 minutes of my gameplay is way too large to be stored here, but it can be found [here](https://drive.google.com/file/d/1SUqj6fXK3nTCg7GRLq4a85wilPRJ7OyH/view?usp=sharing).
+<p align="center">
+  <img src=https://github.com/kevincow/COSC61-Final-Project/assets/23646234/e97d4a32-11a1-4a8d-8747-bfc6d11b55dc alt="IMG3">
+</p>
+
 ## Important Files
 * `index.html` - Structures and formats the text and images used for the visualization of the game.
 * `script.js` - Deals with interactive portions and event handling, such as the generation and randomization of prompts, and handling the user input and its resulting response.
