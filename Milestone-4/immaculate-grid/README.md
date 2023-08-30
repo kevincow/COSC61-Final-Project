@@ -30,6 +30,5 @@ The game works as follows:
 * `prompts.sql` - Not necessary to run the game at this point, but was used to craft all of the prompts and their respective attributes.
 * `images` - A subdirectory that stores all of the images, which mainly constitute logos, needed for the game.
 
-## Timeline & Implementation Notes
 
 
