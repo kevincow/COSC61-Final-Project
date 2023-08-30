@@ -1,0 +1,2 @@
+# Milestone-4: Database Enhancements 
+My database enhancement is the creation of a web trivia game the Immaculate Grid. More information regarding it can be found in the README file in the Immaculate Grid subdirectory and also the Milestone-4 Project Wiki. In addition, this directory also contains a subdirectory called visualization. This directory contains the .csv files outputted from the query result answers to the Milestone-1 questions in addition to the Jupyter notebook python script that created matplotlib plots from the data contained in the .csv files. 
