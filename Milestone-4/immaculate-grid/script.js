@@ -1,7 +1,8 @@
-let guessesRemaining = 9;
-let usedNames = [];
-var prompts;
+let guessesRemaining = 9; // Stores the number of attempts the player has left
+let usedNames = []; // Stores the players that have already been used for a successful answer
+var prompts; // Stores the dictionary of prompts along with their associated data
 
+// Fetches and stores the prompts data (which is stored in the baseball database) sent from prompts.php
 function fetchPrompts() {
 
     return fetch('prompts.php')
@@ -18,22 +19,27 @@ function fetchPrompts() {
 
 fetchPrompts();
 
+// Update the row and column prompts, which should be randomized with each iteration of the game
 function updateTable() {
 
     var headers = new Array();
     var numRows = 3;
     var numCols = 3;
     
-    // we need to ensure that we don't get a grid where a row is a hitting stat and a col is a pitching stat (or vice versa)
-    let limitHittingStats = false;
-    let limitPitchingStats = false;
+    // We need to ensure that we don't get a grid where a row is a hitting stat and a col is a pitching stat (or vice versa)
+    // since that prompts with both hitter and pitcher requirements are often impossible
+    var limitHittingStats = false;
+    var limitPitchingStats = false;
 
-    // randomly pick enough unique prompts to fill up rows and cols
+    // Randomly pick enough unique prompts to fill up rows and cols
+    // We first pick 3 to fill up the rows so that we can check whether we need to limit what kinds of prompts the columns can have
     for (var i = 0; i < numRows; i++) {
 
+        // Generate a random number between a 1 and 50 inclusive, each number represents one of the prompts in the database
         var randomElement = Math.floor(Math.random() * 50 + 1);
         if (headers.includes(randomElement)) {
 
+            // Ensures that the prompts are unique
             i--;
 
         } else {
@@ -41,11 +47,13 @@ function updateTable() {
             headers.push(randomElement);
             if (randomElement > 30 && randomElement < 40) {
 
-                limitHittingStats = true;
+                // If we have a hitting stat in any of the rows, we prevent columns from having a pitching stat
+                limitPitchingStats = true;
 
             } else if (randomElement >= 40) {
 
-                limitPitchingStats = true;
+                // If we have a pitching stat in any of the rows, we prevent columns from having any hitting stats
+                limitHittingStats = true;
 
             }
 
@@ -53,6 +61,7 @@ function updateTable() {
 
     }
 
+    // The same thing but now we can fill up the columns
     for (var i = numRows; i < numRows + numCols; i++) {
 
         if (limitPitchingStats && limitHittingStats) {
@@ -105,11 +114,12 @@ function updateTable() {
 
     }
 
+    // We now update the visual presentations of the prompts in the the grid
     var myTable = document.getElementById('gameTable');
 
-    // update the first row
     for (var i = 0; i < numRows; i++) {
 
+        // Insert the image of the logo if there is an image associated with the prompt in the database
         if (rowInfo[i]["image_name"] !== "no_image") {
 
             var imgID = "img" + (i + 1);
@@ -119,13 +129,14 @@ function updateTable() {
 
         } else {
 
+            // Else just display simple text attached to the prompt
             myTable.rows[i + 1].cells[0].innerHTML = rowInfo[i]["prompt_name"];
 
         }
 
     }
 
-    // update the first column
+    // Same thing but for columns
     for (var i = 0; i < numCols; i++) {
 
         if (columnInfo[i]["image_name"] !== "no_image") {
@@ -145,28 +156,27 @@ function updateTable() {
 
 }    
 
-
+// Updates the visual text denoting the number of guesses a player has
 function updateGuessesDisplay() {
 
     document.getElementById("guesses").innerText = "Attempts Remaining: " + guessesRemaining;
-    // insert a check for if guesses = 0 then head to game over screen or something...
 
 }
 
+// Handles what happens when a player selects a grid cell
 function askPlayer(btnid, row, col) {
 
+    // First much match the cell with the associated prompts
     var rowID = "row" + row;
     var colID = "col" + col;
 
     var myRow = document.getElementById(rowID);
     var myCol = document.getElementById(colID);
 
-    console.log(myRow);
-    console.log(myCol);
-
     var rowPrompt;
     if (myRow.innerHTML.indexOf('alt') !== -1) {
 
+        // The prompt is stored in the alt field in images
         rowPrompt = myRow.innerHTML.match(/alt="([^"]*)"/)[1];
 
     } else {
@@ -186,22 +196,28 @@ function askPlayer(btnid, row, col) {
 
     }
 
+    // Ask the user for their answer
     let playerName = prompt("Enter player's name: ");
 
-    bruh = JSON.stringify({ playerName, rowPrompt, colPrompt});
-    console.log(bruh);
+    // Check the JSON (which should always be right)
+    // bruh = JSON.stringify({ playerName, rowPrompt, colPrompt});
+    // console.log(bruh);
 
+
+    // If the user actually inputs something
     if (playerName) {
 
-        // check if the user already used the player for a different answer
+        // Check if the user already used the player for a different answer
         if (usedNames.includes(playerName.toLowerCase())) {
             alert("You've already used that player!");
             return;
         }
 
+        // Add the inputted name to the cell
         var btn = document.getElementById(btnid);
         btn.innerHTML = playerName;
 
+        // Send over the player's answer to check_answer.php, which will determine whether the answer is correct or not
         fetch("check_answer.php", {
             method: "POST",
             headers: {
@@ -211,20 +227,31 @@ function askPlayer(btnid, row, col) {
         })
         .then(response => response.json())
         .then(data => {
+
+            // We get a valid JSON message back from check_answer.php
             console.log(data.message);
             if (data.message === "Incorrect.") {
+
+                // Remove the name on the cell if it is incorrect
                 btn.innerHTML = ""; 
             } else if (data.message === "Correct!") {
+
+                // Update the cell's color and disable the button if correct
                 btn.classList.add("correct-answer");
                 btn.disabled = true;
+
+                // Add the name to the usedNames list
                 usedNames.push(playerName.toLowerCase());
             } 
+
+            // Notify the player of the result
             alert(data.message);
 
-
+            // Decrement the number of attempts left by one
             guessesRemaining--;
             updateGuessesDisplay();
 
+            // If there are no more attempts, end the game
             if (guessesRemaining === 0) {
                 setTimeout(gameOver, 1000);
             }
@@ -232,17 +259,24 @@ function askPlayer(btnid, row, col) {
         })
         .catch(error => {
 
+            // Similar to the code directly above but we use a txt file based
+            // backup in case there is an issue with the JSON decoding
+
+            // Call JSON_alternative.php to read the txt file that is returned from check_answer.php
             fetch('JSON_alternative.php')
                 .then(response => response.text())
                 .then(data => {
-                    message = data.split(",")[0];
-                    player = data.split(",")[1];
+
+                    // Extract the message and the player
+                    message = data.split(", ")[0];
+                    player = data.split(", ")[1];
                     if (message === "Incorrect.") {
                         btn.innerHTML = "";
                     } else if (message === "Correct!") {
                         btn.classList.add("correct-answer");
                         btn.disabled = true;
                         usedNames.push(player.toLowerCase());
+                        console.log("Player: " + player.toLowerCase());
                     }
                     alert(message);
 
@@ -259,6 +293,7 @@ function askPlayer(btnid, row, col) {
 
 }
 
+// Handles the event in which the player has no more attempts left
 function gameOver() {
 
     // Disable all answer buttons
@@ -270,27 +305,10 @@ function gameOver() {
     alert("Game Over! Click OK to Play Again!");
 
     restartGame();
-    /*
-    //Hide attempt counts
-    const countDiv = document.getElementById("guesses");
-    countDiv.style.visibility = 'hidden';
-    countDiv.style.display = 'none';
-
-    // Show the game over modal
-    const modal = document.getElementById("gameOverModal");
-    modal.style.display = 'block';
-    modal.style.visibility = 'visible';
-
-    const btnRestart = document.getElementById("btnRestart");
-    btnRestart.disabled = false;
-
-    const btnExit = document.getElementById("btnExit");
-    btnExit.disabled = false;
-    */
-
 
 }
 
+// Restarts the game by refreshing the page
 function restartGame() {
 
     location.reload();
@@ -308,53 +326,4 @@ window.onload = function() {
     updateGuessesDisplay();
 
 }
-
-/*
-
-function CustomAlert() {
-
-    this.alert = function(message, title) {
-
-        document.body.innerHTML = document.body.innerHTML + '<div id="dialogoverlay"></div><div id="dialogbox" class="slit-in-vertical"><div><div id="dialogboxhead"></div><div id="dialogboxbody"></div><div id="dialogboxfoot"></div></div></div>';
-
-        let dialogoverlay = document.getElementById('dialogoverlay');
-        let dialogbox = document.getElementById('dialogbox');
-      
-        let winH = window.innerHeight;
-        dialogoverlay.style.height = winH + "px";
-      
-        dialogbox.style.top = "100px";
-  
-        dialogoverlay.style.display = "block";
-        dialogbox.style.display = "block";
-      
-        document.getElementById('dialogboxhead').style.display = 'block';
-  
-        if (typeof title === 'undefined') {
-        
-            document.getElementById('dialogboxhead').style.display = 'none';
-      
-        } else {
-        
-            document.getElementById('dialogboxhead').innerHTML = '<i class="fa fa-exclamation-circle" aria-hidden="true"></i> ' + title;
-      
-        }
-      
-        document.getElementById('dialogboxbody').innerHTML = message;
-        document.getElementById('dialogboxfoot').innerHTML = '<button class="pure-material-button-contained active" onclick="customAlert.ok()">OK</button>';
-
-    }
-    
-    this.ok = function() {
-
-        document.getElementById('dialogbox').style.display = "none";
-        document.getElementById('dialogoverlay').style.display = "none";
-
-    }
-
-}
-*/
-
-
-// let customAlert = new CustomAlert();
 
