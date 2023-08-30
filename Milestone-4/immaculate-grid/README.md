@@ -39,7 +39,7 @@ The link to a video with around 20 minutes of my gameplay is way too large to be
 * `JSON_alternative.txt` - This is a file that `check_answer.php` writes the result of its answer checking to. Sometimes JSON_decode failed to decode properly JSON_encoded messages, so by writing to this file, we can parse the text via `JSON_alternative.php` in order to extract the data and send it directly to `script.js`. 
 * `JSON_alternative2.txt` - This is a file that `check_answer.php` writes the JSON message it receives to. Sometimes JSON_decode failed to decode properly JSON_encoded messages, so by writing the JSON encoded test to the file and parsing it via string-based methods, we can protect our code from this error.
 
-### Implementation and Logic
+## Implementation and Logic
 Here, I lay out the logic/logical flow laying out the foundation of the implementation of this code:
 * Construct a prompts table via `prompts.sql` in the baseball database
     * The table must be have the columns prompt_id, prompt_name, sql_condition, and image_name
