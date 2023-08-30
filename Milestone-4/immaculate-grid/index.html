@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Immaculate Grid</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="script.js"></script>
+</head>
+<body onload="updateTable()">
+    <h1>
+        <font color="#FF2626">I</font>
+        <font color="#252A34">m</font>
+        <font color="#753422">m</font>
+        <font color="#FFD523">a</font>
+        <font color="#71EFA3">c</font>
+        <font color="#0F52BA">u</font>
+        <font color="#66CC66">l</font>
+        <font color="#FF9966">a</font>
+        <font color="#FFCCCC">t</font>
+        <font color="#00C1D4">e</font>
+        <font color="#FF2626">G</font>
+        <font color="#252A34">r</font>
+        <font color="#753422">i</font>
+        <font color="#FFD523">d</font>
+    </h1>
+    <table id="gameTable">
+        <tr>
+            <th><img src="images/MLB.png" alt="MLB"></th>
+            <th id="col1">30+ HR</th>
+            <th id="col2">200+ K</th>
+            <th id="col3">25+ SB</th>
+        </tr>
+        <tr>
+            <th id="row1"><img id = "img1" src="images/yankees.png" alt="Yankees"></th>
+            <td><button id="btn11" value="Answer" onclick="askPlayer(this.id,1,1)"></button></td>
+            <td><button id="btn12" value="Answer" onclick="askPlayer(this.id,1,2)"></button></td>
+            <td><button id="btn13" value="Answer" onclick="askPlayer(this.id,1,3)"></button></td>
+        </tr>
+        <tr>
+            <th id="row2"><img id = "img2" src="images/redsox.png" alt="Red Sox"></th>
+            <td><button id="btn21" value="Answer" onclick="askPlayer(this.id,2,1)"></button></td>
+            <td><button id="btn22" value="Answer" onclick="askPlayer(this.id,2,2)"></button></td>
+            <td><button id="btn23" value="Answer" onclick="askPlayer(this.id,2,3)"></button></td>
+        </tr>
+        <tr>
+            <th id="row3"><img id = "img3" src="images/dodgers.png" alt="Dodgers"></th>
+            <td><button id="btn31" value="Answer" onclick="askPlayer(this.id,3,1)"></button></td>
+            <td><button id="btn32" value="Answer" onclick="askPlayer(this.id,3,2)"></button></td>
+            <td><button id="btn33" value="Answer" onclick="askPlayer(this.id,3,3)"></button></td>
+        </tr>
+    </table>
+
+    <!-- display the number of guesses remaining-->
+    <div id="guesses" style="margin-top: 25px;">
+        Attempts Remaining: 9
+    </div>
+
+    <!-- game over screen -->
+    <div id="gameOver" style="display: none; margin-top: 50px;">
+        <!--<p>Game Over!</p>-->
+        <!--<button onclick="restartGame()">New Game</button>-->
+        <button id="btnRestart" style="width: 250px;" onclick="restartGame()">New Game</button>
+        <button id="btnExit" stype="width: 250px;" onclick="exitGame()">Exit Game</button>
+    </div>
+    <!--<script src="script.js"></script>-->
+</body>
+</html>
